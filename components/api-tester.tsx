@@ -13,10 +13,25 @@ type InputValues = {
   [key: string]: string;
 };
 
+const CopyButton: React.FC<{ text: string }> = ({ text }) => {
+  const copyToClipboard = () => {
+    if (text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Copied to clipboard!");
+      });
+    } else {
+      alert("Nothing to copy!");
+    }
+  };
+
+  return <button onClick={copyToClipboard}>Copy to Clipboard</button>;
+};
+
 const ApiTester: React.FC<ApiTesterProps> = ({ endpoint, method, parameters, headers }) => {
   const [response, setResponse] = useState<any>(null);
   const [error, setError] = useState<any>(null);
   const [inputValues, setInputValues] = useState<InputValues>({});
+  const [showCodeSnippet, setShowCodeSnippet] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -47,6 +62,23 @@ const ApiTester: React.FC<ApiTesterProps> = ({ endpoint, method, parameters, hea
     }
   };
 
+  const generateCodeSnippet = () => {
+    const url = endpoint.replace(/\{(.*?)\}/g, (_, key: string) => inputValues[key] || `{${key}}`);
+    const headersSnippet = headers
+      .map((header) => `"${header}": "${inputValues[header] || ""}"`)
+      .join(",\n");
+    const bodySnippet = method !== "GET" ? JSON.stringify(inputValues, null, 2) : "";
+
+    return `axios({
+  method: "${method}",
+  url: "${url}",
+  headers: {
+    ${headersSnippet}
+  },
+  data: ${bodySnippet}
+});`;
+  };
+
   return (
     <div className="api-tester">
       <h3>Test API: {method} {endpoint}</h3>
@@ -73,6 +105,14 @@ const ApiTester: React.FC<ApiTesterProps> = ({ endpoint, method, parameters, hea
         </div>
       ))}
       <button onClick={handleTestApi}>Test API</button>
+      <button onClick={() => setShowCodeSnippet(!showCodeSnippet)}>Toggle Code Snippet</button>
+      {showCodeSnippet && (
+        <div className="code-snippet">
+          <h4>Code Snippet:</h4>
+          <pre>{generateCodeSnippet()}</pre>
+          <CopyButton text={generateCodeSnippet()} />
+        </div>
+      )}
       {response && (
         <div className="response">
           <h4>Response:</h4>
