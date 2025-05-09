@@ -1,124 +1,51 @@
-import type { Endpoint } from "./types"
+// import { endpoints } from "@/lib/endpoints";
 
-export const endpoints: Endpoint[] = [
+export const updatedEndpoints = [
   {
-    path: "/api-keys",
+    path: "/api/thread/{thread_id}/agent/start",
     method: "POST",
-    description: "Create a new API key for authentication.",
-    category: "API Keys",
+    description: "Start an agent for a specific thread in the background.",
+    category: "Agent Management",
+    pathParams: ["thread_id"],
     requestBody: JSON.stringify({
-      description: "My API Key",
-    }),
-    responseExample: JSON.stringify({
-      key_id: "uuid-example",
-      api_key: "your-api-key-value",
-      created_at: "2023-01-01T00:00:00Z",
-      description: "My API Key",
-    }),
-    defaultBody: JSON.stringify(
-      {
-        description: "My API Key",
-      },
-      null,
-      2,
-    ),
+      model_name: "anthropic/claude-3-7-sonnet-latest",
+      enable_thinking: false,
+      reasoning_effort: "low",
+      stream: true,
+      enable_context_manager: false,
+    }, null, 2),
+    responseExample: JSON.stringify({ success: true, message: "Agent started." }, null, 2),
   },
   {
-    path: "/api-keys",
+    path: "/api/agent-run/{agent_run_id}/stop",
+    method: "POST",
+    description: "Stop a running agent.",
+    category: "Agent Management",
+    pathParams: ["agent_run_id"],
+    responseExample: JSON.stringify({ success: true, message: "Agent stopped." }, null, 2),
+  },
+  {
+    path: "/api/thread/{thread_id}/agent-runs",
     method: "GET",
-    description: "List all active API keys for the authenticated user.",
-    category: "API Keys",
-    responseExample: JSON.stringify([
-      {
-        key_id: "uuid-example-1",
-        created_at: "2023-01-01T00:00:00Z",
-        description: "Production API Key",
-        last_used: "2023-01-02T00:00:00Z",
-      },
-      {
-        key_id: "uuid-example-2",
-        created_at: "2023-01-03T00:00:00Z",
-        description: "Development API Key",
-        last_used: null,
-      },
-    ]),
+    description: "Get all agent runs for a thread.",
+    category: "Agent Management",
+    pathParams: ["thread_id"],
+    responseExample: JSON.stringify({ agent_runs: [] }, null, 2),
   },
   {
-    path: "/api-keys/{key_id}/regenerate",
+    path: "/api/signup",
     method: "POST",
-    description: "Regenerate an existing API key. The old key will be invalidated immediately.",
-    category: "API Keys",
-    pathParams: ["key_id"],
-    responseExample: JSON.stringify({
-      key_id: "uuid-example",
-      api_key: "new-api-key-value",
-      created_at: "2023-01-04T00:00:00Z",
-      description: "My API Key",
-    }),
-    defaultBody: JSON.stringify(
-      {
-        key_id: "your-key-id",
-      },
-      null,
-      2,
-    ),
+    description: "Signup a new user.",
+    category: "Authentication",
+    requestBody: JSON.stringify({ email: "user@example.com", password: "password123" }, null, 2),
+    responseExample: JSON.stringify({ access_token: "token", token_type: "bearer" }, null, 2),
   },
   {
-    path: "/api-keys/{key_id}",
-    method: "DELETE",
-    description: "Delete an API key. The key will be immediately invalidated.",
-    category: "API Keys",
-    pathParams: ["key_id"],
-    defaultBody: JSON.stringify(
-      {
-        key_id: "your-key-id",
-      },
-      null,
-      2,
-    ),
-  },
-  {
-    path: "/signup",
+    path: "/api/signin",
     method: "POST",
-    description: "Register a new user account.",
-    category: "API Keys",
-    requestBody: JSON.stringify({
-      email: "user@example.com",
-      password: "your-secure-password",
-    }),
-    responseExample: JSON.stringify({
-      access_token: "jwt-token-example",
-      token_type: "bearer",
-    }),
-    defaultBody: JSON.stringify(
-      {
-        email: "user@example.com",
-        password: "your-secure-password",
-      },
-      null,
-      2,
-    ),
+    description: "Signin an existing user.",
+    category: "Authentication",
+    requestBody: JSON.stringify({ email: "user@example.com", password: "password123" }, null, 2),
+    responseExample: JSON.stringify({ access_token: "token", token_type: "bearer" }, null, 2),
   },
-  {
-    path: "/signin",
-    method: "POST",
-    description: "Authenticate and get an access token.",
-    category: "API Keys",
-    requestBody: JSON.stringify({
-      email: "user@example.com",
-      password: "your-secure-password",
-    }),
-    responseExample: JSON.stringify({
-      access_token: "jwt-token-example",
-      token_type: "bearer",
-    }),
-    defaultBody: JSON.stringify(
-      {
-        email: "user@example.com",
-        password: "your-secure-password",
-      },
-      null,
-      2,
-    ),
-  },
-]
+];

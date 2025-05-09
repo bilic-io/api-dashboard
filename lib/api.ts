@@ -1,6 +1,6 @@
 import type { ApiKey, ApiKeyResponse } from "./types"
 
-const BASE_URL = "https://bilic-manus-production.up.railway.app/api"
+const BASE_URL = "http://localhost:8000/api"
 
 // Helper function to handle API responses
 async function handleResponse<T>(response: Response): Promise<T> {
