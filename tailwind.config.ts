@@ -20,38 +20,97 @@ const config = {
     },
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "#121212", // Dark background
-        foreground: "#E0F2E9", // Light green foreground
-        primary: {
-          DEFAULT: "#00FF00", // Green primary color
-          foreground: "#003300", // Dark green foreground
+        // Map all theme colors to CSS variables for bulletproof dark mode
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        card: 'hsl(var(--card))',
+        'card-foreground': 'hsl(var(--card-foreground))',
+        popover: 'hsl(var(--popover))',
+        'popover-foreground': 'hsl(var(--popover-foreground))',
+        primary: 'hsl(var(--primary))',
+        'primary-foreground': 'hsl(var(--primary-foreground))',
+        secondary: 'hsl(var(--secondary))',
+        'secondary-foreground': 'hsl(var(--secondary-foreground))',
+        muted: 'hsl(var(--muted))',
+        'muted-foreground': 'hsl(var(--muted-foreground))',
+        accent: 'hsl(var(--accent))',
+        'accent-foreground': 'hsl(var(--accent-foreground))',
+        destructive: 'hsl(var(--destructive))',
+        'destructive-foreground': 'hsl(var(--destructive-foreground))',
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        // Keep the rest of your palette (gray, blue, etc.) as is for utility
+        black: '#181A1B',
+        white: '#FFFFFF',
+        gray: {
+          50: '#F9FAFB',
+          100: '#F3F4F6',
+          200: '#E5E7EB',
+          300: '#D1D5DB',
+          400: '#9CA3AF',
+          500: '#6B7280',
+          600: '#4B5563',
+          700: '#374151',
+          800: '#1F2937',
+          900: '#111827',
         },
-        secondary: {
-          DEFAULT: "#006400", // Secondary green
-          foreground: "#E0F2E9", // Light green foreground
+        green: {
+          50: '#F0FDF4',
+          100: '#DCFCE7',
+          200: '#BBF7D0',
+          300: '#86EFAC',
+          400: '#4ADE80',
+          500: '#22C55E',
+          600: '#16A34A',
+          700: '#15803D',
+          800: '#166534',
+          900: '#14532D',
         },
-        destructive: {
-          DEFAULT: "#FF0000", // Red for destructive actions
-          foreground: "#330000", // Dark red foreground
+        blue: {
+          50: '#EFF6FF',
+          100: '#DBEAFE',
+          200: '#BFDBFE',
+          300: '#93C5FD',
+          400: '#60A5FA',
+          500: '#3B82F6',
+          600: '#2563EB',
+          700: '#1D4ED8',
+          800: '#1E40AF',
+          900: '#1E3A8A',
         },
-        muted: {
-          DEFAULT: "#2E2E2E", // Muted dark gray
-          foreground: "#A9A9A9", // Muted light gray
+        yellow: {
+          50: '#FFFBEB',
+          100: '#FEF3C7',
+          200: '#FDE68A',
+          300: '#FCD34D',
+          400: '#FBBF24',
+          500: '#F59E42',
+          600: '#D97706',
+          700: '#B45309',
+          800: '#92400E',
+          900: '#78350F',
         },
-        accent: {
-          DEFAULT: "#32CD32", // Lime green accent
-          foreground: "#003300", // Dark green foreground
+        red: {
+          50: '#FEF2F2',
+          100: '#FEE2E2',
+          200: '#FECACA',
+          300: '#FCA5A5',
+          400: '#F87171',
+          500: '#EF4444',
+          600: '#DC2626',
+          700: '#B91C1C',
+          800: '#991B1B',
+          900: '#7F1D1D',
         },
-        popover: {
-          DEFAULT: "#1C1C1C", // Popover dark gray
-          foreground: "#E0F2E9", // Light green foreground
+        // Gradients and noise
+        gradient: {
+          green: 'linear-gradient(135deg, #166534 0%, #22C55E 100%)',
+          blue: 'linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%)',
+          gray: 'linear-gradient(135deg, #374151 0%, #1F2937 100%)',
         },
-        card: {
-          DEFAULT: "#1E1E1E", // Card dark gray
-          foreground: "#E0F2E9", // Light green foreground
+        noise: {
+          light: 'url("/noise.png")',
         },
       },
       borderRadius: {

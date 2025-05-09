@@ -120,22 +120,24 @@ export function ApiKeysList() {
 
   return (
     <>
-      <Card className="animate-fade-up">
-        <CardHeader>
+      <Card className="animate-fade-up bg-background border-border text-foreground relative overflow-hidden">
+        {/* Noise overlay for card */}
+        <div className="absolute inset-0 pointer-events-none z-0 bg-[url('/noise.png')] opacity-5" />
+        <CardHeader className="relative z-10">
           <CardTitle>Your API Keys</CardTitle>
           <CardDescription>Manage your API keys for authentication.</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="relative z-10">
           {loading ? (
             <div className="flex justify-center py-6">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
             </div>
           ) : apiKeys.length === 0 ? (
             <div className="text-center py-6 text-muted-foreground">
               No API keys found. Create your first API key to get started.
             </div>
           ) : (
-            <div className="rounded-md border">
+            <div className="rounded-md border border-border bg-muted/40">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -148,27 +150,27 @@ export function ApiKeysList() {
                 <TableBody>
                   {apiKeys.map((key) => (
                     <TableRow key={key.key_id} className="animate-fade-in">
-                      <TableCell className="font-medium">{key.description || "No description"}</TableCell>
-                      <TableCell>{formatDate(key.created_at)}</TableCell>
-                      <TableCell>{key.last_used ? formatDate(key.last_used) : "Never"}</TableCell>
+                      <TableCell className="font-medium text-foreground">{key.description || "No description"}</TableCell>
+                      <TableCell className="text-muted-foreground">{formatDate(key.created_at)}</TableCell>
+                      <TableCell className="text-muted-foreground">{key.last_used ? formatDate(key.last_used) : "Never"}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
                           <Button
                             variant="outline"
                             size="icon"
                             onClick={() => handleRegenerateClick(key.key_id)}
-                            className="h-8 w-8 transition-all hover:text-green-500 hover:border-green-500"
+                            className="h-8 w-8 transition-all hover:text-primary hover:border-primary"
                           >
-                            <RotateCw className="h-4 w-4" />
+                            <RotateCw className="h-4 w-4 text-foreground" />
                             <span className="sr-only">Regenerate</span>
                           </Button>
                           <Button
                             variant="outline"
                             size="icon"
                             onClick={() => handleDeleteClick(key.key_id)}
-                            className="h-8 w-8 transition-all hover:text-red-500 hover:border-red-500"
+                            className="h-8 w-8 transition-all hover:text-destructive hover:border-destructive"
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="h-4 w-4 text-foreground" />
                             <span className="sr-only">Delete</span>
                           </Button>
                         </div>
@@ -181,20 +183,20 @@ export function ApiKeysList() {
           )}
 
           {regeneratedKey && (
-            <div className="mt-6 p-4 border rounded-md bg-green-50 dark:bg-green-950 animate-fade-in">
+            <div className="mt-6 p-4 border border-primary/40 rounded-md bg-primary/10 animate-fade-in">
               <div className="flex justify-between items-center">
                 <div>
-                  <h3 className="font-medium text-green-800 dark:text-green-300">New API Key</h3>
-                  <p className="text-sm text-green-700 dark:text-green-400 mt-1">
+                  <h3 className="font-medium text-primary">New API Key</h3>
+                  <p className="text-sm text-primary/80 mt-1">
                     Make sure to copy your new API key now. You won't be able to see it again!
                   </p>
                 </div>
                 <Button variant="outline" size="sm" onClick={() => handleCopyKey(regeneratedKey)} className="gap-1">
-                  <Copy className="h-3 w-3" />
+                  <Copy className="h-3 w-3 text-foreground" />
                   Copy
                 </Button>
               </div>
-              <div className="mt-2 p-2 bg-green-100 dark:bg-green-900 rounded font-mono text-sm break-all">
+              <div className="mt-2 p-2 bg-muted/60 rounded font-mono text-sm break-all text-foreground">
                 {regeneratedKey}
               </div>
             </div>
