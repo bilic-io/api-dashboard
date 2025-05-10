@@ -133,24 +133,28 @@ export async function register(name: string, email: string, password: string): P
 
 // Request password reset
 export async function requestPasswordReset(email: string): Promise<void> {
-  // This endpoint is not implemented in the backend yet
-  // In a real app, you would call your password reset endpoint
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve()
-    }, 1000)
+  const response = await fetch(`${BASE_URL}/password/reset-request`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
   })
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null)
+    throw new Error(errorData?.detail || `API error: ${response.status} ${response.statusText}`)
+  }
 }
 
 // Reset password with token
 export async function resetPassword(token: string, newPassword: string): Promise<void> {
-  // This endpoint is not implemented in the backend yet
-  // In a real app, you would call your password reset confirmation endpoint
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve()
-    }, 1000)
+  const response = await fetch(`${BASE_URL}/password/reset-confirm`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token, new_password: newPassword }),
   })
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null)
+    throw new Error(errorData?.detail || `API error: ${response.status} ${response.statusText}`)
+  }
 }
 
 // Logout function

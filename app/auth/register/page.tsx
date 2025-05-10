@@ -12,7 +12,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Checkbox } from "@/components/ui/checkbox"
 import { useToast } from "@/hooks/use-toast"
 import { register } from "@/lib/api"
-import { AtSign, Lock, User } from "lucide-react"
+import { getErrorMessage } from "@/lib/utils"
+import { AtSign, Lock, User, Eye, EyeOff } from "lucide-react"
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("")
@@ -20,6 +21,11 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [acceptTerms, setAcceptTerms] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [emailError, setEmailError] = useState("")
+  const [passwordError, setPasswordError] = useState("")
+  const [confirmPasswordError, setConfirmPasswordError] = useState("")
   const router = useRouter()
   const { toast } = useToast()
 
@@ -45,20 +51,31 @@ export default function RegisterPage() {
     }
 
     setLoading(true)
+    // Reset field errors before submit
+    setEmailError("")
+    setPasswordError("")
+    setConfirmPasswordError("")
 
     try {
       // Note: The backend doesn't support name field, so we're only passing email and password
       await register("", email, password)
-      toast({
-        title: "Account created",
-        description: "Your account has been created successfully",
-      })
-      router.push("/dashboard")
+      router.push("/auth/check-email")
     } catch (error) {
       console.error("Registration failed:", error)
+      const errorMsg = getErrorMessage(error, "There was an error creating your account")
+      // Try to highlight all fields with error
+      if (/email/i.test(errorMsg)) {
+        setEmailError(errorMsg)
+      }
+      if (/password/i.test(errorMsg) && !/confirm password/i.test(errorMsg)) {
+        setPasswordError(errorMsg)
+      }
+      if (/confirm password/i.test(errorMsg)) {
+        setConfirmPasswordError(errorMsg)
+      }
       toast({
         title: "Registration Failed",
-        description: "There was an error creating your account",
+        description: errorMsg,
         variant: "destructive",
       })
     } finally {
@@ -91,9 +108,10 @@ export default function RegisterPage() {
                     placeholder="name@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10"
+                    className={`pl-10${emailError ? " border-red-500 focus-visible:ring-red-500" : ""}`}
                     required
                   />
+                  {emailError && <p className="text-xs text-red-500 mt-1">{emailError}</p>}
                 </div>
               </div>
 
@@ -103,12 +121,21 @@ export default function RegisterPage() {
                   <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="password"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10"
+                    className={`pl-10 pr-10${passwordError ? " border-red-500 focus-visible:ring-red-500" : ""}`}
                     required
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    className="absolute right-3 top-2.5 p-1 text-muted-foreground hover:text-foreground focus:outline-none"
+                    tabIndex={-1}
+                  >
+                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  </button>
+                  {passwordError && <p className="text-xs text-red-500 mt-1">{passwordError}</p>}
                 </div>
               </div>
 
@@ -118,12 +145,21 @@ export default function RegisterPage() {
                   <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="confirmPassword"
-                    type="password"
+                    type={showConfirmPassword ? "text" : "password"}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="pl-10"
+                    className={`pl-10 pr-10${confirmPasswordError ? " border-red-500 focus-visible:ring-red-500" : ""}`}
                     required
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword((v) => !v)}
+                    className="absolute right-3 top-2.5 p-1 text-muted-foreground hover:text-foreground focus:outline-none"
+                    tabIndex={-1}
+                  >
+                    {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  </button>
+                  {confirmPasswordError && <p className="text-xs text-red-500 mt-1">{confirmPasswordError}</p>}
                 </div>
               </div>
 
