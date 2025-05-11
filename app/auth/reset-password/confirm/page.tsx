@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,7 +11,7 @@ import { resetPassword } from "@/lib/api"
 import { getErrorMessage } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
 
-export default function ResetPasswordConfirmPage() {
+function ResetPasswordForm() {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [loading, setLoading] = useState(false)
@@ -102,4 +102,12 @@ export default function ResetPasswordConfirmPage() {
       </div>
     </div>
   )
-} 
+}
+
+export default function ResetPasswordConfirmPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ResetPasswordForm />
+    </Suspense>
+  )
+}
